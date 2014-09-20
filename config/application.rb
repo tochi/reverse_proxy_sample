@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'rack/reverse_proxy'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -19,5 +20,9 @@ module ReverseProxySample
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+
+    config.middleware.use Rack::ReverseProxy do
+      reverse_proxy /^\/hoge\/?(.*)\/?$/, "https://s3-ap-northeast-1.amazonaws.com/demo.aguuu.com/$1"
+    end
   end
 end
